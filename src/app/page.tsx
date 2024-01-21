@@ -1,3 +1,4 @@
+'use client';
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +22,6 @@ export default function Home() {
           开始 <ArrowRight className="ml-2 size-5" />
         </Link>
       </MaxWidthWrap>
-
       <div>
         <div className="relative isolate">
           <GradientBackground left="11rem" smLeft="30rem" />
