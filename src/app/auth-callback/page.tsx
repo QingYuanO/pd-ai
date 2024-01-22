@@ -31,7 +31,7 @@ export default function Page() {
     <div className="mt-24 flex w-full justify-center">
       <div className="gep-2 flex flex-col items-center">
         <Loader2 className="size-8 animate-spin text-zinc-800" />
-        <h3 className="text-xl font-semibold">正在设置帐户</h3>
+        <h3 className="text-xl font-semibold">正在登录帐户</h3>
         <p>自动跳转中...</p>
       </div>
     </div>
