@@ -3,7 +3,7 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { publicProcedure, router } from './trpc';
+import { privateProcedure, publicProcedure, router } from './trpc';
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async opts => {
@@ -29,6 +29,47 @@ export const appRouter = router({
       success: true,
     };
   }),
+  getUserFiles: privateProcedure.query(async opts => {
+    const { user } = opts.ctx;
+    if (!user?.id) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+    const files = await db.file.findMany({
+      where: {
+        userId: user.id,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return files;
+  }),
+  deleteFile: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async opts => {
+      const { id } = opts.input;
+      const { userId } = opts.ctx;
+      const file = await db.file.findFirst({
+        where: {
+          id,
+          userId,
+        },
+      });
+      if (!file) {
+        throw new TRPCError({ code: 'NOT_FOUND' });
+      }
+      await db.file.delete({
+        where: {
+          id,
+          userId,
+        },
+      });
+      return file;
+    }),
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
