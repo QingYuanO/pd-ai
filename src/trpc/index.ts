@@ -44,6 +44,20 @@ export const appRouter = router({
     });
     return files;
   }),
+  getFile: privateProcedure.input(z.object({ key: z.string() })).mutation(async opts => {
+    const { userId } = opts.ctx;
+    const { key } = opts.input;
+    const file = await db.file.findFirst({
+      where: {
+        key,
+        userId,
+      },
+    });
+    if (!file) {
+      throw new TRPCError({ code: 'NOT_FOUND' });
+    }
+    return file;
+  }),
   deleteFile: privateProcedure
     .input(
       z.object({
