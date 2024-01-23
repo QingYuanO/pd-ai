@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import 'react-loading-skeleton/dist/skeleton.css'
+import { Toaster } from '@/components/ui/toaster';
+
+import 'react-loading-skeleton/dist/skeleton.css';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
@@ -23,10 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className={cn('grainy min-h-screen font-sans antialiased', inter.className)}>
           <Navbar />
           {children}
+          <Toaster />
         </body>
       </Providers>
     </html>
   );
 }
-
-
