@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 import './globals.css';
+import 'simplebar-react/dist/simplebar.min.css'
 
 import { cn } from '@/lib/utils';
 
