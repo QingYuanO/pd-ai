@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
@@ -11,21 +11,22 @@ export default function Page() {
   const searchParams = useSearchParams();
   const origin = searchParams.get('origin');
 
-  const { data, isLoading, isSuccess, isError, error } = trpc.authCallback.useQuery(undefined, {
-    retry: true,
-    retryDelay: 500,
+  const { data, isSuccess, isError, error, fetchStatus } = trpc.authCallback.useQuery(undefined, {
+    // retry: true,
+    // retryDelay: 500,
   });
-
-  React.useEffect(() => {
-    if (isSuccess) {
+  useEffect(() => {
+    if (isSuccess && data?.success) {
       router.push(origin ? `/${origin}` : '/dashboard');
     }
-    if (isError) {
-      if (error.data?.code === 'UNAUTHORIZED') {
-        router.push('/sign-in');
-      }
+  }, [isSuccess, data, router, origin]);
+
+  // Handle error in useEffect
+  useEffect(() => {
+    if (isError && error.data?.code === 'UNAUTHORIZED') {
+      router.push('/sign-in');
     }
-  }, [isError, isSuccess, router, origin, error]);
+  }, [isError, error, router]);
 
   return (
     <div className="mt-24 flex w-full justify-center">
